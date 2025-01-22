@@ -103,7 +103,7 @@ const ActivityTrackerClient = ({
                                 {activityGrid.map((week, weekIndex) => (
                                     <td key={weekIndex} className="w-10 text-center">
                                         <div
-                                            className={`w-3 h-3 rounded-tr-md rounded-bl-md ${getColor(week[dayIndex])}`}
+                                            className={`w-3 h-3 rounded-sm ${getColor(week[dayIndex])}`}
                                             onMouseEnter={(e) => showTooltip(e, weekIndex, dayIndex)}
                                             onMouseLeave={hideTooltip}
                                         />
