@@ -22,8 +22,8 @@ const ActivityTrackerClient = ({
     const getColor = (activityCount: number): string => {
         if (activityCount === -1) return "";
         if (activityCount === 0) return "bg-gray-800";
-        if (activityCount <= 3) return "bg-rose-600";
-        if (activityCount <= 6) return "bg-rose-500";
+        if (activityCount <= 3) return "bg-rose-500";
+        if (activityCount <= 6) return "bg-rose-600";
         if (activityCount <= 9) return "bg-rose-700";
         return "bg-green-900";
     };
