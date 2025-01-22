@@ -64,7 +64,7 @@ const ActivityTrackerClient = ({
 
     return (
         <div className="p-6">
-            <h1 className="text-3xl font-normal mb-4">Activity Tracker {selectedYear}</h1>
+            <h1 className="text-3xl font-bold mb-4">Activity Tracker {selectedYear}</h1>
 
             <div className="mb-4">
                 <label htmlFor="year" className="mr-2 text-gray-900 dark:text-gray-100">Select Year :</label>
