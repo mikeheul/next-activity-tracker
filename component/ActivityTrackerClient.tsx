@@ -56,10 +56,16 @@ const ActivityTrackerClient = ({
     };
 
     const shouldShowMonth = (weekIndex: number) => {
-        // Afficher le mois toutes les 4 semaines
         if (weekIndex % 4 === 0) {
-            const month = getMonthForWeek(weekIndex);
-            return month !== null;
+            const currentMonth = getMonthForWeek(weekIndex);
+            if (!currentMonth) return false;
+            
+            // Vérifier si le mois est différent du précédent
+            if (weekIndex > 0) {
+                const prevMonth = getMonthForWeek(weekIndex - 4);
+                return currentMonth !== prevMonth;
+            }
+            return true;
         }
         return false;
     };
