@@ -48,9 +48,16 @@ const ActivityTrackerClient = ({
 
     const showTooltip = (event: React.MouseEvent, weekIndex: number, dayIndex: number) => {
         const activityCount = activityGrid ? activityGrid[weekIndex][dayIndex] : 0;
+    
+        // Ne pas afficher de tooltip si l'activité est à -1
+        if (activityCount === -1) {
+            hideTooltip();
+            return;
+        }
+    
         const date = getDateForWeekAndDay(weekIndex, dayIndex);
         const tooltipText = `${date.toLocaleDateString()} - Activity : ${activityCount}`;
-
+    
         setTooltip({
             text: tooltipText,
             x: event.clientX,
