@@ -46,6 +46,24 @@ const ActivityTrackerClient = ({
         return new Date(selectedYear, 0, startOfWeek + weekIndex * 7 + dayIndex);
     };
 
+    const getMonthForWeek = (weekIndex: number) => {
+        const date = getDateForWeekAndDay(weekIndex, 0);
+        // Vérifier si la date est dans l'année sélectionnée
+        if (date.getFullYear() === selectedYear) {
+            return date.toLocaleString('fr-FR', { month: 'short' });
+        }
+        return null;
+    };
+
+    const shouldShowMonth = (weekIndex: number) => {
+        // Afficher le mois toutes les 4 semaines
+        if (weekIndex % 4 === 0) {
+            const month = getMonthForWeek(weekIndex);
+            return month !== null;
+        }
+        return false;
+    };
+
     const showTooltip = (event: React.MouseEvent, weekIndex: number, dayIndex: number) => {
         const activityCount = activityGrid ? activityGrid[weekIndex][dayIndex] : 0;
     
@@ -98,8 +116,14 @@ const ActivityTrackerClient = ({
                     <thead>
                         <tr>
                             <th className="w-32 text-center"></th>
-                            {Array.from({ length: activityGrid.length }, (_, i) => (
-                                <th key={i} className="w-10 text-center"></th>
+                            {Array.from({ length: activityGrid.length }, (_, weekIndex) => (
+                                <th key={weekIndex} className="w-10 text-xs">
+                                    {shouldShowMonth(weekIndex) && (
+                                        <div className="text-gray-600 dark:text-gray-400">
+                                            {getMonthForWeek(weekIndex)}
+                                        </div>
+                                    )}
+                                </th>
                             ))}
                         </tr>
                     </thead>
