@@ -1,12 +1,16 @@
 import ActivityTrackerClient from "@/component/ActivityTrackerClient";
 import { fetchActivities } from "../api/activity/fetchActivities";
 
-interface PageProps {
-    searchParams: { [key: string]: string | string[] | undefined };
+interface SearchParams {
+    year?: string;
 }
 
-const ActivityTracker = async ({ searchParams }: PageProps) => {
-    const yearParam = searchParams.year ? parseInt(searchParams.year as string) : new Date().getFullYear();
+const ActivityTracker = async ({
+    searchParams,
+}: {
+    searchParams: SearchParams;
+}) => {
+    const yearParam = searchParams.year ? parseInt(searchParams.year) : new Date().getFullYear();
     const activityGrid = await fetchActivities(yearParam);
 
     return (
