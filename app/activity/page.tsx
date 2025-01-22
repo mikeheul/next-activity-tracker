@@ -2,12 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-interface ActivityGrid {
-    [week: number]: number[]; // [week][day] => activityCount
-}
-
 const ActivityTracker = () => {
-    const [activityGrid, setActivityGrid] = useState<ActivityGrid | null>(null);
+    const [activityGrid, setActivityGrid] = useState<number[][] | null>(null);
     const [selectedYear, setSelectedYear] = useState<number>(2025);
 
     const years = [2021, 2022, 2023, 2024, 2025];
@@ -104,7 +100,7 @@ const ActivityTracker = () => {
                             <tr key={dayIndex}>
                                 <td className="text-xs w-32 leading-none">{day}</td>
                                 {activityGrid ? (
-                                    activityGrid.map((week, weekIndex) => {
+                                    activityGrid.map((week: number[], weekIndex: number) => {
                                         const activityCount = week[dayIndex];
 
                                         return (
