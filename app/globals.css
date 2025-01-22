@@ -9,7 +9,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #0d1117;
     --foreground: #ededed;
   }
 }
@@ -19,3 +19,27 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Cible la barre de défilement horizontale */
+::-webkit-scrollbar {
+  height: 8px; /* Hauteur de la barre de défilement horizontale */
+}
+
+/* Cible la partie de la barre de défilement qui peut être déplacée */
+::-webkit-scrollbar-thumb {
+  background-color: #515151; /* Couleur de la barre de défilement */
+  border-radius: 10px; /* Coins arrondis */
+  /* border: 2px solid #ffffff; Bordure autour de la barre */
+}
+
+/* Cible la zone de la barre de défilement */
+::-webkit-scrollbar-track {
+  /* background-color: #f1f1f1; Couleur de l'arrière-plan de la barre */
+  border-radius: 10px;
+}
+
+/* Optionnel : pour les barres de défilement horizontales (en cas de besoin spécifique) */
+::-webkit-scrollbar-horizontal {
+  height: 8px; /* Hauteur spécifique pour la barre de défilement horizontale */
+}
+

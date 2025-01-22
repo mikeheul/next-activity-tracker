@@ -1,0 +1,6 @@
+model Activity {
+    id              String   @id @default(auto()) @map("_id") @db.ObjectId
+    userId          String
+    date            DateTime
+    activityCount   Int
+}
