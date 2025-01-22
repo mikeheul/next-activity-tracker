@@ -1,5 +1,20 @@
 ![screenshot](image.png)
 
+# MongoDB Collection Structure
+
+## Collection's name : `activity`
+
+### Example
+
+```json
+{
+  "_id": "679011752a6ddb868b71ce4f",
+  "userId": "user123",
+  "date": "2025-01-01T00:00:00.000+00:00",
+  "activityCount": 8
+}
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
