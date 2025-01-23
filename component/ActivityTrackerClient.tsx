@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 
 const ActivityTrackerClient = ({
     initialActivityGrid,
@@ -17,16 +17,18 @@ const ActivityTrackerClient = ({
         y: 0,
     });
 
-    const years = [2021, 2022, 2023, 2024, 2025];
+    // Memoize years to prevent recreation
+    const years = useMemo(() => [2021, 2022, 2023, 2024, 2025], []);
 
-    const getColor = (activityCount: number): string => {
+    // Memoize getColor function
+    const getColor = useCallback((activityCount: number): string => {
         if (activityCount === -1) return "";
         if (activityCount === 0) return "bg-gray-800";
         if (activityCount <= 3) return "bg-rose-500";
         if (activityCount <= 6) return "bg-rose-600";
         if (activityCount <= 9) return "bg-rose-700";
         return "bg-green-900";
-    };
+    }, []);
 
     const fetchActivitiesForYear = async (year: number) => {
         try {
@@ -40,27 +42,26 @@ const ActivityTrackerClient = ({
 
     const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-    const getDateForWeekAndDay = (weekIndex: number, dayIndex: number) => {
+    // Memoize date calculation functions
+    const getDateForWeekAndDay = useCallback((weekIndex: number, dayIndex: number) => {
         const firstDayOfYear = new Date(selectedYear, 0, 1);
         const startOfWeek = firstDayOfYear.getDate() - firstDayOfYear.getDay() + 1;
         return new Date(selectedYear, 0, startOfWeek + weekIndex * 7 + dayIndex);
-    };
+    }, [selectedYear]);
 
-    const getMonthForWeek = (weekIndex: number) => {
+    const getMonthForWeek = useCallback((weekIndex: number) => {
         const date = getDateForWeekAndDay(weekIndex, 0);
-        // Vérifier si la date est dans l'année sélectionnée
         if (date.getFullYear() === selectedYear) {
             return date.toLocaleString('fr-FR', { month: 'short' });
         }
         return null;
-    };
+    }, [selectedYear, getDateForWeekAndDay]);
 
-    const shouldShowMonth = (weekIndex: number) => {
+    const shouldShowMonth = useCallback((weekIndex: number) => {
         if (weekIndex % 4 === 0) {
             const currentMonth = getMonthForWeek(weekIndex);
             if (!currentMonth) return false;
             
-            // Vérifier si le mois est différent du précédent
             if (weekIndex > 0) {
                 const prevMonth = getMonthForWeek(weekIndex - 4);
                 return currentMonth !== prevMonth;
@@ -68,12 +69,12 @@ const ActivityTrackerClient = ({
             return true;
         }
         return false;
-    };
+    }, [getMonthForWeek]);
 
-    const showTooltip = (event: React.MouseEvent, weekIndex: number, dayIndex: number) => {
+    // Memoize tooltip handlers
+    const showTooltip = useCallback((event: React.MouseEvent, weekIndex: number, dayIndex: number) => {
         const activityCount = activityGrid ? activityGrid[weekIndex][dayIndex] : 0;
     
-        // Ne pas afficher de tooltip si l'activité est à -1
         if (activityCount === -1) {
             hideTooltip();
             return;
@@ -87,11 +88,18 @@ const ActivityTrackerClient = ({
             x: event.clientX,
             y: event.clientY,
         });
-    };
+    }, [activityGrid, getDateForWeekAndDay]);
 
-    const hideTooltip = () => {
+    const hideTooltip = useCallback(() => {
         setTooltip({ text: null, x: 0, y: 0 });
-    };
+    }, []);
+
+    // Memoize year change handler
+    const handleYearChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        const year = Number(e.target.value);
+        setSelectedYear(year);
+        fetchActivitiesForYear(year);
+    }, []);
 
     return (
         <div className="p-6">
@@ -102,11 +110,7 @@ const ActivityTrackerClient = ({
                 <select
                     id="year"
                     value={selectedYear}
-                    onChange={(e) => {
-                        const year = Number(e.target.value);
-                        setSelectedYear(year);
-                        fetchActivitiesForYear(year);
-                    }}
+                    onChange={handleYearChange}
                     className="p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     {years.map((year) => (
@@ -152,10 +156,10 @@ const ActivityTrackerClient = ({
                 </table>
                 {tooltip.text && (
                     <div
-                        className="absolute bg-rose-500 border border-white text-white text-xs rounded-md py-1 px-2 shadow-md"
+                        className="fixed bg-rose-500 border border-white text-white text-xs rounded-md py-1 px-2 shadow-md"
                         style={{
-                            left: tooltip.x + 10,
-                            top: tooltip.y + 10,
+                            left: `${tooltip.x + 10}px`,
+                            top: `${tooltip.y + 10}px`,
                             pointerEvents: "none",
                             zIndex: 10,
                         }}
@@ -168,4 +172,4 @@ const ActivityTrackerClient = ({
     );
 };
 
-export default ActivityTrackerClient;
+export default memo(ActivityTrackerClient);
