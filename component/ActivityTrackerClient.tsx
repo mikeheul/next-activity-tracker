@@ -1,6 +1,17 @@
 "use client";
 
-import { useState, useMemo, useCallback, memo } from "react";
+import { useState, useCallback, memo } from "react";
+
+const years = [2021, 2022, 2023, 2024, 2025];
+
+const getColor = (activityCount: number): string => {
+    if (activityCount === -1) return "";
+    if (activityCount === 0) return "bg-gray-800";
+    if (activityCount <= 3) return "bg-rose-500";
+    if (activityCount <= 6) return "bg-rose-600";
+    if (activityCount <= 9) return "bg-rose-700";
+    return "bg-green-900";
+};
 
 const ActivityTrackerClient = ({
     initialActivityGrid,
@@ -16,19 +27,6 @@ const ActivityTrackerClient = ({
         x: 0,
         y: 0,
     });
-
-    // Memoize years to prevent recreation
-    const years = useMemo(() => [2021, 2022, 2023, 2024, 2025], []);
-
-    // Memoize getColor function
-    const getColor = useCallback((activityCount: number): string => {
-        if (activityCount === -1) return "";
-        if (activityCount === 0) return "bg-gray-800";
-        if (activityCount <= 3) return "bg-rose-500";
-        if (activityCount <= 6) return "bg-rose-600";
-        if (activityCount <= 9) return "bg-rose-700";
-        return "bg-green-900";
-    }, []);
 
     const fetchActivitiesForYear = async (year: number) => {
         try {
