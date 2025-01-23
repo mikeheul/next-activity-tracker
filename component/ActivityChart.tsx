@@ -17,9 +17,9 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const ActivityChart = ({ activityData }: { activityData: number[] }) => {
     // Générer les 31 derniers jours pour les labels
-    const labels = Array.from({ length: 31 }, (_, i) => {
+    const labels = Array.from({ length: 5 }, (_, i) => {
         const date = new Date();
-        date.setDate(date.getDate() - (30 - i)); // Calculer les dates des 31 derniers jours
+        date.setDate(date.getDate() - (4 - i)); // Calculer les dates des 31 derniers jours
         return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
     });
 

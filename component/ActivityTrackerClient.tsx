@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, memo, useEffect } from "react";
-import ActivityChart from "./ActivityChart";
+import { useState, useCallback, memo } from "react";
+// import ActivityChart from "./ActivityChart";
 
 const years = [2021, 2022, 2023, 2024, 2025];
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -23,7 +23,6 @@ const ActivityTrackerClient = ({
     initialYear: number;
 }) => {
     const [activityGrid, setActivityGrid] = useState<number[][]>(initialActivityGrid);
-    const [activityData, setActivityData] = useState<number[]>([]); // Les données pour les 31 derniers jours
     const [selectedYear, setSelectedYear] = useState<number>(initialYear);
     const [tooltip, setTooltip] = useState<{ text: string | null; x: number; y: number }>({
         text: null,
@@ -40,32 +39,6 @@ const ActivityTrackerClient = ({
             console.error("Failed to fetch activities:", error);
         }
     };
-
-    // Fonction pour extraire les données des 31 derniers jours
-    const extractLast31Days = useCallback(() => {
-        const today = new Date(); // La date actuelle
-        const last31DaysData: number[] = []; // Tableau des 31 derniers jours
-    
-        // Générer les données pour les 31 derniers jours
-        for (let i = 30; i >= 0; i--) {
-            const date = new Date(today); // Clone la date actuelle
-            date.setDate(today.getDate() - i); // Recule d'un jour à chaque itération
-    
-            // Ajouter une valeur d'activité par défaut (par exemple 0 pour les jours passés)
-            // Pour tester, vous pouvez générer une valeur aléatoire entre 0 et 10
-            const activityCount = Math.floor(Math.random() * 10); // Valeur aléatoire entre 0 et 9
-            last31DaysData.push(activityCount); // Ajouter la valeur d'activité générée
-        }
-    
-        // Vérification dans la console
-        console.log("Derniers 31 jours d'activités : ", last31DaysData);
-    
-        setActivityData(last31DaysData); // Mettre à jour les données
-    }, []);
-    
-    useEffect(() => {
-        extractLast31Days(); // Appeler la fonction pour initialiser les données au montage du composant
-    }, [extractLast31Days]);
 
     // Memoize date calculation functions
     const getDateForWeekAndDay = useCallback((weekIndex: number, dayIndex: number) => {
@@ -192,11 +165,6 @@ const ActivityTrackerClient = ({
                         {tooltip.text}
                     </div>
                 )}
-            </div>
-
-            {/* Graphique des activités */}
-            <div className="max-w-[800px] w-full">
-                <ActivityChart activityData={activityData} /> 
             </div>
         </div>
     );
