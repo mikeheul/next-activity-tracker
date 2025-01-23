@@ -70,6 +70,10 @@ const ActivityTrackerClient = ({
         }
         return false;
     }, [getMonthForWeek]);
+    
+    const hideTooltip = useCallback(() => {
+        setTooltip({ text: null, x: 0, y: 0 });
+    }, []);
 
     // Memoize tooltip handlers
     const showTooltip = useCallback((event: React.MouseEvent, weekIndex: number, dayIndex: number) => {
@@ -88,11 +92,7 @@ const ActivityTrackerClient = ({
             x: event.clientX,
             y: event.clientY,
         });
-    }, [activityGrid, getDateForWeekAndDay]);
-
-    const hideTooltip = useCallback(() => {
-        setTooltip({ text: null, x: 0, y: 0 });
-    }, []);
+    }, [activityGrid, getDateForWeekAndDay, hideTooltip]);
 
     // Memoize year change handler
     const handleYearChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
